@@ -9,4 +9,4 @@ Package: hubclient
 Architecture: all
 Depends: python (>= 2.4)
 Section: misc
-Description: Example
+Description: TurnKey Linux Hub client
