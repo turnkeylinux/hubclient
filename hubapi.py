@@ -14,6 +14,9 @@ import hubconf
 
 URL = os.getenv('HUB_APIURL', 'https://hub.turnkeylinux.org/api')
 
+class HubAPIError(Exception):
+    pass
+
 def _post(uri, post_data={}):
     response = {}
     response_data = cStringIO.StringIO()
@@ -37,14 +40,12 @@ def _post(uri, post_data={}):
 def register_finalize():
     """final phase of server registration in hub"""
     conf = hubconf.HubServerConf()
-
-    if not conf.has_key('serverid'):
-        return "SERVERID not specified in %s" % conf.CONF_FILE
+    conf.validate_required(['serverid'])
 
     response = _post('server/register/finalize/', {'serverid': conf.serverid})
 
     if not response['code'] == 200:
-        return "%s\n%s" % (response['code'], response['data'])
+        raise HubAPIError(response)
 
     data = json.loads(response['data'])
     conf.update(data)

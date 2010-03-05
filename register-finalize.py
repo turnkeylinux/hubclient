@@ -4,10 +4,6 @@
 import sys
 import hubapi
 
-def fatal(s):
-    print >> sys.stderr, "error: " + str(s)
-    sys.exit(1)
-
 def usage():
     print >> sys.stderr, "Syntax: %s" % sys.argv[0]
     print >> sys.stderr, __doc__.strip()
@@ -17,10 +13,7 @@ def main():
     if len(sys.argv) > 1:
         usage()
 
-    error = hubapi.register_finalize()
-    if error:
-        fatal(error)
-
+    hubapi.register_finalize()
     print "successful"
 
 if __name__=="__main__":
