@@ -89,3 +89,9 @@ class ConfFile(dict):
 class HubServerConf(ConfFile):
     CONF_FILE = os.getenv('HUB_SERVERCONF', '/etc/hubclient/server.conf')
 
+class HubAMQConf(ConfFile):
+    SET_ENVIRON = True
+    CONF_FILE = os.getenv('HUB_AMQCONF', '/etc/hubclient/amq.conf')
+    REQUIRED = ['broker_host', 'broker_port', 'broker_user', 'broker_password',
+                'broker_vhost']
+
