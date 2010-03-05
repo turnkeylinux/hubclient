@@ -25,10 +25,13 @@ class ConfFile(dict):
     """
     CONF_FILE = None
     REQUIRED = []
+    SET_ENVIRON = False
 
     def __init__(self):
         self.read()
         self.validate_required()
+        if self.SET_ENVIRON:
+            self.set_environ()
 
     def validate_required(self, required=[]):
         """raise exception if required arguments are not set
@@ -39,6 +42,11 @@ class ConfFile(dict):
             if not self.has_key(attr):
                 error = "%s not specified in %s" % (attr.upper(), self.CONF_FILE)
                 raise ConfFileError(error)
+
+    def set_environ(self):
+        """set environment (run on initialization if SET_ENVIRON"""
+        for key, val in self.items():
+            os.environ[key.upper()] = val
 
     def read(self):
         if not self.CONF_FILE or not os.path.exists(self.CONF_FILE):
