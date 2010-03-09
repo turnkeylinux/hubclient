@@ -5,7 +5,7 @@ import os
 import sys
 
 import hubconf
-import executil
+from executil import system
 
 def usage():
     print >> sys.stderr, "Syntax: %s" % sys.argv[0]
@@ -23,7 +23,7 @@ def main():
     os.environ['TKLAMQ_SECRET'] = srvconf.secret
 
     queue = "server.%s.%s" % (srvconf.apikey, srvconf.serverid)
-    executil.system("tklamq-consume %s" % queue)
+    system("tklamq-consume %s" % queue)
 
 if __name__=="__main__":
     main()
