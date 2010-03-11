@@ -19,7 +19,8 @@ def main():
     srvconf = hubconf.HubServerConf()
     srvconf.validate_required(['serverid'])
 
-    exchange = routing_key = "hub.heartbeat"
+    exchange = "hub"
+    routing_key = "hub.heartbeat"
     system("tklamq-publish --sender=%s --non-persistent %s %s" % (srvconf.serverid,
                                                                   exchange,
                                                                   routing_key))
