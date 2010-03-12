@@ -87,6 +87,7 @@ class ConfFile(dict):
         self[key] = val
 
 class HubServerConf(ConfFile):
+    SET_ENVIRON = True
     CONF_FILE = os.getenv('HUB_SERVERCONF', '/etc/hubclient/server.conf')
 
 class HubAMQConf(ConfFile):

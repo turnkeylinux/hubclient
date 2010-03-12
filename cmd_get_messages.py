@@ -5,7 +5,8 @@ import os
 import sys
 
 import hubconf
-from executil import system
+from hubmessages import wrapper_callback
+from tklamq.amqp import connect
 
 def usage():
     print >> sys.stderr, "Syntax: %s" % sys.argv[0]
@@ -20,10 +21,10 @@ def main():
     srvconf = hubconf.HubServerConf()
     srvconf.validate_required(['serverid', 'apikey', 'secret'])
 
-    os.environ['TKLAMQ_SECRET'] = srvconf.secret
-
     queue = "server.%s.%s" % (srvconf.apikey, srvconf.serverid)
-    system("tklamq-consume %s" % queue)
+
+    conn = connect()
+    conn.consume(queue, callback=wrapper_callback)
 
 if __name__=="__main__":
     main()
