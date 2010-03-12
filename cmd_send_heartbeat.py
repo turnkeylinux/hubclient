@@ -4,7 +4,7 @@
 import sys
 
 import hubconf
-from executil import system
+from tklamq.amqp import connect, encode_message
 
 def usage():
     print >> sys.stderr, "Syntax: %s" % sys.argv[0]
@@ -19,11 +19,11 @@ def main():
     srvconf = hubconf.HubServerConf()
     srvconf.validate_required(['serverid'])
 
-    exchange = "hub"
-    routing_key = "hub.heartbeat"
-    system("tklamq-publish --sender=%s --non-persistent %s %s" % (srvconf.serverid,
-                                                                  exchange,
-                                                                  routing_key))
+    conn = connect()
+    conn.publish(exchange="hub", routing_key="hub.heartbeat",
+                 message=encode_message(sender=srvconf.serverid, content=""),
+                 persistent=False)
+
 
 if __name__=="__main__":
     main()
