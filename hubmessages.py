@@ -3,7 +3,6 @@ import sys
 import tempfile
 
 import executil
-import simplejson as json
 from tklamq.amqp import decode_message
 
 class Error(Exception):
@@ -45,12 +44,11 @@ def func_script(content):
 def wrapper_callback(message_data, message):
     """generic message consume callback wrapper
 
-    deserializes message content after decryption and calls specified function
-    with specified arguments, e.g.,
+    content must be of type dict, with key matching function to be called
+    passing value, e.g.,
 
-        content = {'script', '#!/bin/bash echo "hello world"'}
-
-        would call _func_script('#!/bin/bash echo "hello world"')
+        content = {'script': '#!/bin/bash echo "hello world"'}
+        would call func_script('#!/bin/bash echo "hello world"')
 
     will raise an exception if message is not encrypted
     """
@@ -64,11 +62,10 @@ def wrapper_callback(message_data, message):
 
     secret = os.getenv('SECRET')
     sender, content, timestamp = decode_message(message_data, secret)
-
-    content_data = json.loads(content)
-    for func_name in content_data.keys():
+    
+    for func_name in content.keys():
         func = getattr(sys.modules[__name__], 'func_' + func_name)
-        func(content_data[func_name])
+        func(content[func_name])
     
     print "message processed (%s)" % timestamp.isoformat(" ")
 
