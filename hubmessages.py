@@ -41,14 +41,26 @@ def func_script(content):
     os.chmod(fh.path, 0750)
     executil.system(fh.path)
 
+def func_init_masterpass(masterpass):
+    """set initial passwords using master password by creating inithooks.conf
+    will be depreciated when the hub supports custom appliance configuration
+    """
+
+    print masterpass
+    fh = file('/tmp/inithooks.conf', "w")
+    for s in ('rootpass', 'mysqlpass', 'pgsqlpass'):
+        print >> fh, "export %s=%s" % (s.upper(), masterpass)
+
+    fh.close()
+
 def wrapper_callback(message_data, message):
     """generic message consume callback wrapper
 
     content must be of type dict, with key matching function to be called
-    passing value, e.g.,
+    passing value:
 
-        content = {'script': '#!/bin/bash echo "hello world"'}
-        would call func_script('#!/bin/bash echo "hello world"')
+        content = {'function1': 'argument for function1'}
+        would call func_function1('argument for function1')
 
     will raise an exception if message is not encrypted
     """
