@@ -16,12 +16,12 @@ def main():
         usage()
 
     amqconf = hubconf.HubAMQConf()
-    srvconf = hubconf.HubServerConf()
-    srvconf.validate_required(['serverid'])
+    conf = hubconf.HubClientConf()
+    conf.validate_required(['serverid'])
 
     conn = connect()
     conn.publish(exchange="hub", routing_key="hub.heartbeat",
-                 message=encode_message(sender=srvconf.serverid, content=""),
+                 message=encode_message(sender=conf.serverid, content=""),
                  persistent=False)
 
 

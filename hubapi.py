@@ -39,7 +39,7 @@ def _post(uri, post_data={}):
 
 def register_finalize():
     """final phase of server registration in hub"""
-    conf = hubconf.HubServerConf()
+    conf = hubconf.HubClientConf()
     conf.validate_required(['serverid'])
 
     response = _post('server/register/finalize/', {'serverid': conf.serverid})

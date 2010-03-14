@@ -18,10 +18,10 @@ def main():
         usage()
 
     amqconf = hubconf.HubAMQConf()
-    srvconf = hubconf.HubServerConf()
-    srvconf.validate_required(['serverid', 'apikey', 'secret'])
+    conf = hubconf.HubClientConf()
+    conf.validate_required(['serverid', 'apikey', 'secret'])
 
-    queue = "server.%s.%s" % (srvconf.apikey, srvconf.serverid)
+    queue = "server.%s.%s" % (conf.apikey, conf.serverid)
 
     conn = connect()
     conn.consume(queue, callback=wrapper_callback)
