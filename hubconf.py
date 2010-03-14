@@ -1,7 +1,7 @@
 """
 Environment variables:
 
-    HUB_SERVERCONF      default: /etc/hubclient/server.conf
+    HUB_SERVERCONF      default: /etc/hubclient.conf
 
     BROKER_HOST         default: amq.turnkeylinux.org
     BROKER_PORT         default: 5672
@@ -94,7 +94,7 @@ class ConfFile(dict):
 
 class HubServerConf(ConfFile):
     SET_ENVIRON = True
-    CONF_FILE = os.getenv('HUB_SERVERCONF', '/etc/hubclient/server.conf')
+    CONF_FILE = os.getenv('HUB_SERVERCONF', '/etc/hubclient.conf')
 
 class HubAMQConf(dict):
     def __init__(self):
