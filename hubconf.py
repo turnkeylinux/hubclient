@@ -2,6 +2,12 @@
 Environment variables:
 
     HUB_SERVERCONF      default: /etc/hubclient/server.conf
+
+    BROKER_HOST         default: amq.turnkeylinux.org
+    BROKER_PORT         default: 5672
+    BROKER_USER         default: server
+    BROKER_PASSWORD     default: server
+    BROKER_VHOST        default: /hub
 """
 
 import os
@@ -44,7 +50,7 @@ class ConfFile(dict):
                 raise ConfFileError(error)
 
     def set_environ(self):
-        """set environment (run on initialization if SET_ENVIRON"""
+        """set environment (run on initialization if SET_ENVIRON)"""
         for key, val in self.items():
             os.environ[key.upper()] = val
 
@@ -90,9 +96,23 @@ class HubServerConf(ConfFile):
     SET_ENVIRON = True
     CONF_FILE = os.getenv('HUB_SERVERCONF', '/etc/hubclient/server.conf')
 
-class HubAMQConf(ConfFile):
-    SET_ENVIRON = True
-    CONF_FILE = os.getenv('HUB_AMQCONF', '/etc/hubclient/amq.conf')
-    REQUIRED = ['broker_host', 'broker_port', 'broker_user', 'broker_password',
-                'broker_vhost']
+class HubAMQConf(dict):
+    def __init__(self):
+        self['broker_host'] = os.getenv('BROKER_HOST', 'amq.turnkeylinux.org')
+        self['broker_port'] = os.getenv('BROKER_PORT', '5672')
+        self['broker_user'] = os.getenv('BROKER_USER', 'server')
+        self['broker_password'] = os.getenv('BROKER_PASSWORD', 'server')
+        self['broker_vhost'] = os.getenv('BROKER_VHOST', '/hub')
+
+        for key in self:
+            os.environ[key.upper()] = self[key]
+
+    def __getattr__(self, key):
+        try:
+            return self[key]
+        except KeyError, e:
+            raise AttributeError(e)
+
+    def __setattr__(self, key, val):
+        self[key] = val
 
