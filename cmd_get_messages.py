@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# Copyright (c) 2010 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
+
 """Consume and process messages from queue"""
 
 import os

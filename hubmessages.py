@@ -1,3 +1,5 @@
+# Copyright (c) 2010 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
+
 import os
 import sys
 import tempfile
