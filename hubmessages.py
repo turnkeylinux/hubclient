@@ -48,8 +48,7 @@ def func_init_masterpass(masterpass):
     will be depreciated when the hub supports custom appliance configuration
     """
 
-    print masterpass
-    fh = file('/tmp/inithooks.conf', "w")
+    fh = file('/etc/inithooks.conf', "w")
     for s in ('rootpass', 'mysqlpass', 'pgsqlpass'):
         print >> fh, "export %s=%s" % (s.upper(), masterpass)
 
