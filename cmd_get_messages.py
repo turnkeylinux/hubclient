@@ -27,7 +27,7 @@ def main():
         fatal("hubclient requires root privileges to run")
 
     amqconf = hubconf.HubAMQConf()
-    conf = hubconf.HubClientConf()
+    conf = hubconf.HubServerConf()
     conf.validate_required(['serverid', 'apikey', 'secret'])
 
     queue = "server.%s.%s" % (conf.apikey, conf.serverid)
