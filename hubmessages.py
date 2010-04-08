@@ -8,6 +8,16 @@ from tklamq.amqp import decode_message
 class Error(Exception):
     pass
 
+def func_authorize_sshkey(sshkey):
+    sshdir = "/root/.ssh"
+    if not os.path.exists(sshdir):
+        os.makedirs(sshdir)
+        os.chmod(sshdir, 0700)
+
+    f = open(os.path.join(sshdir, 'authorized_keys'), 'a')
+    f.write(sshkey + "\n")
+    f.close()
+
 def func_init_masterpass(masterpass):
     """set initial passwords using master password by creating inithooks.conf
     will be depreciated when the hub supports custom appliance configuration
