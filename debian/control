@@ -8,5 +8,6 @@ Standards-Version: 3.6.1
 Package: hubclient
 Architecture: all
 Depends: python (>= 2.4), python-simplejson, python-pycurl, turnkey-pylib, tklamq
+Recommends: inithooks
 Section: misc
 Description: TurnKey Linux Hub client
