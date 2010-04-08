@@ -1,0 +1,9 @@
+==================
+v0.1 Release Notes
+==================
+
+* Initial minimalistic (alpha) release:
+
+    register-finalize: Finalize server registration in hub (once approved)
+    get-messages: Consume and process messages from queue
+
