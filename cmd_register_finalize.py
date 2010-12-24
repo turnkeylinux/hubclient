@@ -36,7 +36,7 @@ def main():
     conf.update({'subkey': subkey, 'secret': secret})
     conf.write()
 
-    print "successful"
+    print "Successfully finalized server registration with the Hub"
 
 if __name__=="__main__":
     main()
