@@ -18,15 +18,9 @@ def func_authorize_sshkey(sshkey):
     f.write(sshkey + "\n")
     f.close()
 
-def func_init_masterpass(masterpass):
-    """set initial passwords using master password by creating inithooks.conf
-    will be depreciated when the hub supports custom appliance configuration
-    """
-
-    fh = file('/etc/inithooks.conf', "w")
-    for s in ('rootpass', 'mysqlpass', 'pgsqlpass'):
-        print >> fh, "export %s=%s" % (s.upper(), masterpass)
-
+def func_preseed_inithooks(value):
+    fh = file('/etc/inithooks.conf', "a")
+    print >> fh, "export %s" % value
     fh.close()
 
 def wrapper_callback(message_data, message):
