@@ -28,9 +28,9 @@ def main():
 
     amqconf = hubconf.HubAMQConf()
     conf = hubconf.HubServerConf()
-    conf.validate_required(['serverid', 'apikey', 'secret'])
+    conf.validate_required(['serverid', 'subkey', 'secret'])
 
-    queue = "server.%s.%s" % (conf.apikey, conf.serverid)
+    queue = "server.%s.%s" % (conf.subkey, conf.serverid)
 
     conn = connect()
     conn.consume(queue, callback=wrapper_callback)

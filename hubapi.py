@@ -1,55 +1,61 @@
 # Copyright (c) 2010 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
 
-"""
-Environment variables:
+"""TurnKey Hub API - Server
 
-    HUB_APIURL          default: https://hub.turnkeylinux.org/api
-"""
+Notes:
+    - Default URL: https://hub.turnkeylinux.org/api/server/
+    - Responses are returned in application/json format
 
-import os
-import pycurl
-import urllib
-import cStringIO
+register/finalize/
+    method: POST
+    fields: serverid
+    return: subkey, secret
+
+Exceptions::
+
+    400 Request.MissingArgument
+    404 HubServer.NotFound
+    401 HubServer.NotApproved
+    401 HubServer.Finalized
+"""
 
 import simplejson as json
-import hubconf
 
-URL = os.getenv('HUB_APIURL', 'https://hub.turnkeylinux.org/api')
+from pycurl_wrapper import Curl
 
-class HubAPIError(Exception):
+class Error(Exception):
     pass
 
-def _post(uri, post_data={}):
-    response = {}
-    response_data = cStringIO.StringIO()
+class API:
+    ALL_OK = 200
+    CREATED = 201
+    DELETED = 204
 
-    c = pycurl.Curl()
-    c.setopt(c.URL, URL + "/" + uri)
-    c.setopt(c.POSTFIELDS, urllib.urlencode(post_data))
-    c.setopt(c.WRITEFUNCTION, response_data.write)
-    #c.setopt(c.VERBOSE, 1)
-    c.perform()
+    CAINFO = "/etc/ssl/certs/hub-turnkeylinux-org.crt"
 
-    response['code'] = c.getinfo(pycurl.RESPONSE_CODE)
-    response['type'] = c.getinfo(pycurl.CONTENT_TYPE)
-    c.close()
+    @classmethod
+    def request(cls, method, url, attrs={}, headers={}):
+        c = Curl(url, headers, cainfo=cls.CAINFO)
+        func = getattr(c, method.lower())
+        func(attrs)
 
-    response['data'] = response_data.getvalue()
-    response_data.close()
+        if not c.response_code in (cls.ALL_OK, cls.CREATED, cls.DELETED):
+            name, description = c.response_data.split(":", 1)
+            raise Error(c.response_code, name, description)
 
-    return response
+        return json.loads(c.response_data)
 
-def register_finalize():
-    """final phase of server registration in hub"""
-    conf = hubconf.HubServerConf()
-    conf.validate_required(['serverid'])
+class Server:
+    API_URL = 'https://hub.turnkeylinux.org/api/server/'
+    API_HEADERS = {'Accept': 'application/json'}
 
-    response = _post('server/register/finalize/', {'serverid': conf.serverid})
+    Error = Error
 
-    if not response['code'] == 200:
-        raise HubAPIError(response)
+    @classmethod
+    def register_finalize(cls, serverid):
+        url = cls.API_URL + "register/finalize/"
+        attrs = {'serverid': serverid}
 
-    data = json.loads(response['data'])
-    conf.update(data)
-    conf.write()
+        response = API.request('POST', url, attrs, cls.API_HEADERS)
+        return response['subkey'], response['secret']
 

@@ -7,6 +7,10 @@ import os
 import sys
 
 import hubapi
+import hubconf
+
+class Error:
+    pass
 
 def usage():
     print >> sys.stderr, "Syntax: %s" % sys.argv[0]
@@ -24,7 +28,14 @@ def main():
     if os.geteuid() != 0:
         fatal("hubclient requires root privileges to run")
 
-    hubapi.register_finalize()
+    conf = hubconf.HubServerConf()
+    conf.validate_required(['serverid'])
+
+    subkey, secret = hubapi.Server.register_finalize(conf.serverid)
+
+    conf.update({'subkey': subkey, 'secret': secret})
+    conf.write()
+
     print "successful"
 
 if __name__=="__main__":
