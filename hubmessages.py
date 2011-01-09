@@ -2,6 +2,7 @@
 
 import os
 import sys
+from commands import mkarg
 
 from tklamq.amqp import decode_message
 
@@ -20,7 +21,9 @@ def func_authorize_sshkey(sshkey):
 
 def func_preseed_inithooks(value):
     fh = file('/etc/inithooks.conf', "a")
-    print >> fh, "export %s" % value
+    arg, val = value.split("=", 1)
+    val = mkarg(val).lstrip()
+    print >> fh, "export %s=%s" % (arg, val)
     fh.close()
 
 def wrapper_callback(message_data, message):
