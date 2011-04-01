@@ -11,6 +11,11 @@ register/finalize/
     fields: serverid
     return: subkey, secret
 
+status/booted/
+    method: PUT
+    fields: serverid
+    return: <response_code>
+
 Exceptions::
 
     400 Request.MissingArgument
@@ -56,4 +61,16 @@ class Server:
 
         response = API.request('POST', url, attrs, cls.API_HEADERS)
         return response['subkey'], response['secret']
+
+    @classmethod
+    def status_booted(cls, serverid):
+        url = cls.API_URL + "status/booted/"
+        attrs = {'serverid': serverid}
+
+        # workaround PUT issue: http://redmine.lighttpd.net/issues/1017
+        headers = cls.API_HEADERS.copy()
+        headers['Expect'] = ''
+
+        response = API.request('PUT', url, attrs, headers)
+        return response
 
