@@ -3,7 +3,6 @@
 
 """Update hub that server is booted"""
 
-import os
 import sys
 
 import hubapi
@@ -17,16 +16,9 @@ def usage():
     print >> sys.stderr, __doc__.strip()
     sys.exit(1)
 
-def fatal(s):
-    print >> sys.stderr, "error: " + str(s)
-    sys.exit(1)
-
 def main():
     if len(sys.argv) > 1:
         usage()
-
-    if os.geteuid() != 0:
-        fatal("hubclient requires root privileges to run")
 
     conf = hubconf.HubServerConf()
     conf.validate_required(['serverid'])
