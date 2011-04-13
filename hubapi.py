@@ -63,8 +63,8 @@ class Server:
         return response['subkey'], response['secret']
 
     @classmethod
-    def status_booted(cls, serverid):
-        url = cls.API_URL + "status/booted/"
+    def status(cls, serverid, boot_status):
+        url = cls.API_URL + "status/%s/" % boot_status
         attrs = {'serverid': serverid}
 
         # workaround PUT issue: http://redmine.lighttpd.net/issues/1017
@@ -73,4 +73,3 @@ class Server:
 
         response = API.request('PUT', url, attrs, headers)
         return response
-
