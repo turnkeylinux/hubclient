@@ -26,6 +26,12 @@ def func_preseed_inithooks(value):
     print >> fh, "export %s=%s" % (arg, val)
     fh.close()
 
+def func_init_masterpass(masterpass):
+    """deprecated: only used in legacy builds"""
+    fh = file('/etc/inithooks.conf', "w")
+    for s in ('rootpass', 'mysqlpass', 'pgsqlpass'):
+        print >> fh, "export %s=%s" % (s.upper(), masterpass)
+
 def wrapper_callback(message_data, message):
     """generic message consume callback wrapper
 
