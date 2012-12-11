@@ -24,7 +24,7 @@ def main():
     conf.validate_required(['serverid'])
 
     boot_status = sys.argv[1]
-    hubapi.Server.status(conf.serverid, boot_status)
+    hubapi.Server().status(conf.serverid, boot_status)
     print "Successfully updated Hub with server boot status: %s" % boot_status
 
 if __name__=="__main__":

@@ -31,7 +31,7 @@ def main():
     conf = hubconf.HubServerConf()
     conf.validate_required(['serverid'])
 
-    subkey, secret = hubapi.Server.register_finalize(conf.serverid)
+    subkey, secret = hubapi.Server().register_finalize(conf.serverid)
 
     conf.update({'subkey': subkey, 'secret': secret})
     conf.write()
