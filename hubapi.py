@@ -44,9 +44,12 @@ class Server:
         response = self.api.request('POST', url, attrs)
         return response['subkey'], response['secret']
 
-    def status(self, serverid, boot_status):
+    def status(self, serverid, boot_status, comment=None):
         url = self.API_URL + "status/%s/" % boot_status
         attrs = {'serverid': serverid}
+
+        if comment:
+            attrs['comment'] = comment
 
         # workaround PUT issue: http://redmine.lighttpd.net/issues/1017
         response = self.api.request('PUT', url, attrs)
