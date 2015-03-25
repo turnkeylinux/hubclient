@@ -22,7 +22,7 @@ def main():
         usage()
 
     conf = hubconf.HubServerConf()
-    conf.validate_required(['serverid'])
+    serverid = conf.get('serverid')
 
     boot_status = args[0]
     try:
@@ -30,8 +30,7 @@ def main():
     except:
         comment = None
 
-    hubapi.Server().status(conf.serverid, boot_status, comment)
-    print "Successfully updated Hub with server boot status: %s" % boot_status
+    hubapi.Server().status(serverid, boot_status, comment)
 
 if __name__=="__main__":
     main()

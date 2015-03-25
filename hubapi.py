@@ -46,7 +46,10 @@ class Server:
 
     def status(self, serverid, boot_status, comment=None):
         url = self.API_URL + "status/%s/" % boot_status
-        attrs = {'serverid': serverid}
+        attrs = {}
+
+        if serverid:
+            attrs['serverid'] = serverid
 
         if comment:
             attrs['comment'] = comment
