@@ -18,5 +18,4 @@ Depends:
 Recommends:
  inithooks,
  openssh-server,
-Section: misc
 Description: TurnKey GNU/Linux Hub client
