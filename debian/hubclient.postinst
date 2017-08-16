@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -e
+
+HUBSERVER_CONF=/var/lib/hubclient/server.conf
+
+if [ ! -f $HUBSERVER_CONF ]
+then
+	# Should use dpkg-statoverride?
+	touch $HUBSERVER_CONF
+	chown root:root $HUBSERVER_CONF
+	chmod 600 $HUBSERVER_CONF
+fi
+
+#DEBHELPER#
+
+exit 0
