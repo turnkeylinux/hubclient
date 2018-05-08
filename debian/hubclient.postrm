@@ -6,6 +6,7 @@ HUBSERVER_CONF=/var/lib/hubclient/server.conf
 
 if [ "$1" = "purge" ]; then
     dpkg-statoverride --remove $HUBSERVER_CONF || test $? -eq 2
+    rm $HUBSERVER_CONF
 fi
 
 #DEBHELPER#
