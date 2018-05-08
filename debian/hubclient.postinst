@@ -4,12 +4,15 @@ set -e
 
 HUBSERVER_CONF=/var/lib/hubclient/server.conf
 
-if [ ! -f $HUBSERVER_CONF ]
-then
-	# Should use dpkg-statoverride?
-	touch $HUBSERVER_CONF
-	chown root:root $HUBSERVER_CONF
-	chmod 600 $HUBSERVER_CONF
+if [ ! -f $HUBSERVER_CONF ]; then
+    mkdir -p $(dirname $HUBSERVER_CONF)
+    touch $HUBSERVER_CONF
+fi
+
+if [ "$1" = "configure" ]; then
+    if ! dpkg-statoverride --list $HUBSERVER_CONF >/dev/null 2>&1; then
+        dpkg-statoverride --update --add root root 600 $HUBSERVER_CONF
+    fi
 fi
 
 #DEBHELPER#
