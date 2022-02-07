@@ -2,7 +2,7 @@
 
 import os
 import sys
-from commands import mkarg
+from subprocess import mkarg
 
 from tklamq.amqp import decode_message
 
@@ -13,7 +13,7 @@ def func_authorize_sshkey(sshkey):
     sshdir = "/root/.ssh"
     if not os.path.exists(sshdir):
         os.makedirs(sshdir)
-        os.chmod(sshdir, 0700)
+        os.chmod(sshdir, 0o700)
 
     f = open(os.path.join(sshdir, 'authorized_keys'), 'a')
     f.write(sshkey + "\n")
@@ -23,14 +23,14 @@ def func_preseed_inithooks(value):
     fh = file('/etc/inithooks.conf', "a")
     arg, val = value.split("=", 1)
     val = mkarg(val).lstrip()
-    print >> fh, "export %s=%s" % (arg, val)
+    print("export %s=%s" % (arg, val), file=fh)
     fh.close()
 
 def func_init_masterpass(masterpass):
     """deprecated: only used in legacy builds"""
     fh = file('/etc/inithooks.conf', "w")
     for s in ('rootpass', 'mysqlpass', 'pgsqlpass'):
-        print >> fh, "export %s=%s" % (s.upper(), masterpass)
+        print("export %s=%s" % (s.upper(), masterpass), file=fh)
 
 def wrapper_callback(message_data, message):
     """generic message consume callback wrapper
@@ -54,9 +54,9 @@ def wrapper_callback(message_data, message):
     secret = os.getenv('SECRET')
     sender, content, timestamp = decode_message(message_data, secret)
     
-    for func_name in content.keys():
+    for func_name in list(content.keys()):
         func = getattr(sys.modules[__name__], 'func_' + func_name)
         func(content[func_name])
     
-    print "message processed (%s)" % timestamp.isoformat(" ")
+    print("message processed (%s)" % timestamp.isoformat(" "))
 

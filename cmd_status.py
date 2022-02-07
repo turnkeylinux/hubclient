@@ -12,8 +12,8 @@ class Error:
     pass
 
 def usage():
-    print >> sys.stderr, "Syntax: %s <boot_status> [ comment ]" % sys.argv[0]
-    print >> sys.stderr, __doc__.strip()
+    print("Syntax: %s <boot_status> [ comment ]" % sys.argv[0], file=sys.stderr)
+    print(__doc__.strip(), file=sys.stderr)
     sys.exit(1)
 
 def main():

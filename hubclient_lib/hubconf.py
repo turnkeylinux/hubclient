@@ -33,7 +33,7 @@ class HubAMQConf(dict):
     def __getattr__(self, key):
         try:
             return self[key]
-        except KeyError, e:
+        except KeyError as e:
             raise AttributeError(e)
 
     def __setattr__(self, key, val):

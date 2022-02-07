@@ -12,8 +12,8 @@ class Error:
     pass
 
 def usage():
-    print >> sys.stderr, "Syntax: %s" % sys.argv[0]
-    print >> sys.stderr, __doc__.strip()
+    print("Syntax: %s" % sys.argv[0], file=sys.stderr)
+    print(__doc__.strip(), file=sys.stderr)
     sys.exit(1)
 
 def main():
@@ -25,7 +25,7 @@ def main():
 
     boot_status = "booted"
     hubapi.Server().status(conf.serverid, boot_status)
-    print "Successfully updated Hub with server boot status: %s" % boot_status
+    print("Successfully updated Hub with server boot status: %s" % boot_status)
 
 if __name__=="__main__":
     main()
