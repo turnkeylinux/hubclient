@@ -1,4 +1,5 @@
-# Copyright (c) 2010 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
+# Copyright (c) 2010-2021 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
+# Copyright (c) 2022 TurnKey GNU/Linux <admin@turnkeylinux.org> - all rights reserved
 
 """TurnKey Hub API - Server
 
@@ -26,13 +27,13 @@ Exceptions::
 
 from pycurl_wrapper import API
 
-class Error(Exception):
-    pass
+from .exceptions import HubClientApiError
+
 
 class Server:
     API_URL = 'https://hub.turnkeylinux.org/api/server/'
 
-    Error = Error
+    HubClientApiError = HubClientApiError
 
     def __init__(self):
         self.api = API()
@@ -45,7 +46,7 @@ class Server:
         return response['subkey'], response['secret']
 
     def status(self, serverid, boot_status, comment=None):
-        url = self.API_URL + "status/%s/" % boot_status
+        url = self.API_URL + f"status/{boot_status}/"
         attrs = {}
 
         if serverid:

@@ -1,15 +1,12 @@
-#!/usr/bin/python
-# Copyright (c) 2011 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
+#!/usr/bin/python3
+# Copyright (c) 2011-2021 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
+# Copyright (c) 2022 TurnKey GNU/Linux <admin@turnkeylinux.org> - all rights reserved
 
 """Update hub that server is booted (depreciated: backwards compat.)"""
 
 import sys
 
-import hubapi
-import hubconf
-
-class Error:
-    pass
+import hubclient_lib
 
 def usage():
     print("Syntax: %s" % sys.argv[0], file=sys.stderr)
@@ -20,13 +17,12 @@ def main():
     if len(sys.argv) > 1:
         usage()
 
-    conf = hubconf.HubServerConf()
+    conf = hubclient_lib.conf.HubServerConf()
     conf.validate_required(['serverid'])
 
     boot_status = "booted"
-    hubapi.Server().status(conf.serverid, boot_status)
-    print("Successfully updated Hub with server boot status: %s" % boot_status)
+    hubclient_lib.api.Server().status(conf.serverid, boot_status)
+    print(f"Successfully updated Hub with server boot status: {boot_status}")
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()
-

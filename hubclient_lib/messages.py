@@ -1,13 +1,12 @@
-# Copyright (c) 2010 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
+# Copyright (c) 2010-2021 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
+# Copyright (c) 2022 TurnKey GNU/Linux <admin@turnkeylinux.org> - all rights reserved
 
 import os
 import sys
-from subprocess import mkarg
 
-from tklamq.amqp import decode_message
+from tklamq_lib.amqp import decode_message
+from .exceptions import HubClientMsgError
 
-class Error(Exception):
-    pass
 
 def func_authorize_sshkey(sshkey):
     sshdir = "/root/.ssh"
@@ -15,22 +14,23 @@ def func_authorize_sshkey(sshkey):
         os.makedirs(sshdir)
         os.chmod(sshdir, 0o700)
 
-    f = open(os.path.join(sshdir, 'authorized_keys'), 'a')
-    f.write(sshkey + "\n")
-    f.close()
+    with open(os.path.join(sshdir, 'authorized_keys'), 'a') as fob:
+        fob.write(sshkey + "\n")
+
 
 def func_preseed_inithooks(value):
-    fh = file('/etc/inithooks.conf', "a")
     arg, val = value.split("=", 1)
-    val = mkarg(val).lstrip()
-    print("export %s=%s" % (arg, val), file=fh)
-    fh.close()
+    val = val.lstrip()
+    with open('/etc/inithooks.conf', "a") as fob:
+        fob.write(f'export {arg}="{val}"\n')
+
 
 def func_init_masterpass(masterpass):
     """deprecated: only used in legacy builds"""
-    fh = file('/etc/inithooks.conf', "w")
-    for s in ('rootpass', 'mysqlpass', 'pgsqlpass'):
-        print("export %s=%s" % (s.upper(), masterpass), file=fh)
+    with open('/etc/inithooks.conf', "w") as fob:
+        for s in ('rootpass', 'mysqlpass', 'pgsqlpass'):
+            fob.write(f"export {s.upper()}={masterpass}\n")
+
 
 def wrapper_callback(message_data, message):
     """generic message consume callback wrapper
@@ -49,7 +49,7 @@ def wrapper_callback(message_data, message):
     message.ack()
 
     if not message_data['encrypted']:
-        raise Error("hubclient only accepts encrypted messages")
+        raise HubClientMsgError("hubclient only accepts encrypted messages")
 
     secret = os.getenv('SECRET')
     sender, content, timestamp = decode_message(message_data, secret)
@@ -58,5 +58,4 @@ def wrapper_callback(message_data, message):
         func = getattr(sys.modules[__name__], 'func_' + func_name)
         func(content[func_name])
     
-    print("message processed (%s)" % timestamp.isoformat(" "))
-
+    print(f'message processed ({timestamp.isoformat(" ")})')
