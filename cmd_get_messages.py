@@ -7,7 +7,7 @@
 import os
 import sys
 
-import hubclient_lib
+import hubclient_lib.conf as hubconf
 from hubclient_lib.messages import wrapper_callback
 from tklamq_lib.amqp import connect
 
@@ -31,10 +31,10 @@ def main():
         fatal("hubclient requires root privileges to run")
 
     amqconf = hubconf.HubAMQConf()
-    conf = hubclient_lib.conf.HubServerConf()
+    conf = hubconf.HubServerConf()
     conf.validate_required(['serverid', 'subkey', 'secret'])
 
-    queue = "server.%s.%s" % (conf.subkey, conf.serverid)
+    queue = f"server.{conf.subkey}.{conf.serverid}"
 
     conn = connect()
     conn.consume(queue, callback=wrapper_callback)

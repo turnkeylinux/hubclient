@@ -7,8 +7,8 @@
 import os
 import sys
 
-import hubclient_lib
-
+import hubclient_lib.conf as hubconf
+import hubclient_lib.api as hubapi
 
 def usage():
     print("Syntax: %s" % sys.argv[0], file=sys.stderr)
@@ -28,10 +28,10 @@ def main():
     if os.geteuid() != 0:
         fatal("hubclient requires root privileges to run")
 
-    conf = hubclient_lib.conf.HubServerConf()
+    conf = hubconf.HubServerConf()
     conf.validate_required(['serverid'])
 
-    subkey, secret = hubclient_lib.api.Server().register_finalize(
+    subkey, secret = hubapi.Server().register_finalize(
             conf.serverid)
 
     conf.update({'subkey': subkey, 'secret': secret})

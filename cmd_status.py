@@ -6,7 +6,8 @@
 
 import sys
 
-import hubclient_lib
+import hubclient_lib.conf as hubconf
+import hubclient_lib.api as hubapi
 
 
 def usage():
@@ -20,7 +21,7 @@ def main():
     if len(args) < 1:
         usage()
 
-    conf = hubclient_lib.conf.HubServerConf()
+    conf = hubconf.HubServerConf()
     serverid = conf.get('serverid')
 
     boot_status = args[0]
@@ -29,7 +30,7 @@ def main():
     except:  # XXX TODO which exception(s)? [shouldn't use bare except]
         comment = None
 
-    hubclient_lib.api.Server().status(serverid, boot_status, comment)
+    hubapi.Server().status(serverid, boot_status, comment)
 
 
 if __name__ == "__main__":
