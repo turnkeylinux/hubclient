@@ -1,1 +1,3 @@
-hubclient       /usr/bin/
+hubclient-get-messages          /usr/bin/
+hubclient-register-finalize     /usr/bin/
+hubclient-status                /usr/bin/

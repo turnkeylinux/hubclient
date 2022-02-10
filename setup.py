@@ -9,5 +9,6 @@ setup(
     author_email="jeremy@turnkeylinux.org",
     url="https://github.com/turnkeylinux/hubclient",
     packages=["hubclient_lib"],
-    scripts=["hubclient"]
+    scripts=["hubclient-get-messages", "hubclient-register-finalize",
+             "hubclient-status"]
 )
