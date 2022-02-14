@@ -54,7 +54,7 @@ def wrapper_callback(message_data, message):
     secret = os.getenv('SECRET')
     sender, content, timestamp = decode_message(message_data, secret)
     
-    for func_name in list(content.keys()):
+    for func_name in content.keys():
         func = getattr(sys.modules[__name__], 'func_' + func_name)
         func(content[func_name])
     
