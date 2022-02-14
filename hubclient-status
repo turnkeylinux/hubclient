@@ -27,7 +27,7 @@ def main():
     boot_status = args[0]
     try:
         comment = args[1]
-    except:  # XXX TODO which exception(s)? [shouldn't use bare except]
+    except IndexError:
         comment = None
 
     hubapi.Server().status(serverid, boot_status, comment)
