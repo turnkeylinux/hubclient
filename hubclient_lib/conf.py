@@ -35,7 +35,9 @@ class HubAMQConf(dict):
         try:
             return self[key]
         except KeyError as e:
-            raise AttributeError(e)
+            raise AttributeError(
+                f'{self.__class__.__name__!r} object has no attribute {key!r}',
+                name=key, obj=self) from e
 
     def __setattr__(self, key, val):
         self[key] = val
