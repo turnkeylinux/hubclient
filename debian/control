@@ -1,23 +1,22 @@
 Source: hubclient
 Section: misc
 Priority: optional
-Maintainer: Alon Swartz <alon@turnkeylinux.org>
+Maintainer: Jeremy Davis <jeremy@turnkeylinux.org>
 Build-Depends:
  debhelper (>= 10),
  dh-python,
- python-all (>= 2.6.6-3~),
+ python3-all (>= 3.6~),
 Standards-Version: 4.0.0
-X-Python-Version: >= 2.6
 
 Package: hubclient
 Architecture: all
 Depends:
  ca-certificates,
  ${misc:Depends},
- pycurl-wrapper (>= 1.1),
- ${python:Depends},
+ py3curl-wrapper,
+ ${python3:Depends},
  tklamq,
- turnkey-pylib,
+ turnkey-conf,
 Recommends:
  inithooks,
  openssh-server,

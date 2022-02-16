@@ -1,10 +1,9 @@
-# Copyright (c) 2010 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
+# Copyright (c) 2010-2021 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
+# Copyright (c) 2022 TurnKey GNU/Linux <admin@turnkeylinux.org> - all rights reserved
 
 """
-Environment variables:
-
+environment variables:
     HUBSERVER_CONF      default: /var/lib/hubclient/server.conf
-
     BROKER_HOST         default: amq.turnkeylinux.org
     BROKER_PORT         default: 5672
     BROKER_USER         default: server
@@ -15,9 +14,11 @@ Environment variables:
 import os
 from conffile import ConfFile
 
+
 class HubServerConf(ConfFile):
     SET_ENVIRON = True
     CONF_FILE = os.getenv('HUBSERVER_CONF', '/var/lib/hubclient/server.conf')
+
 
 class HubAMQConf(dict):
     def __init__(self):
@@ -33,9 +34,10 @@ class HubAMQConf(dict):
     def __getattr__(self, key):
         try:
             return self[key]
-        except KeyError, e:
-            raise AttributeError(e)
+        except KeyError as e:
+            raise AttributeError(
+                f'{self.__class__.__name__!r} object has no attribute {key!r}',
+                name=key, obj=self) from e
 
     def __setattr__(self, key, val):
         self[key] = val
-
