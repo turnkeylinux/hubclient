@@ -16,7 +16,7 @@ Depends:
  py3curl-wrapper,
  ${python3:Depends},
  tklamq,
- turnkey-conf,
+ turnkey-conffile,
 Recommends:
  inithooks,
  openssh-server,
