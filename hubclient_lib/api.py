@@ -25,7 +25,7 @@ Exceptions::
     401 HubServer.Finalized
 """
 
-from pycurl_wrapper import API
+from py3curl_wrapper import API
 
 from .exceptions import HubClientApiError
 
