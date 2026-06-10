@@ -1,0 +1,16 @@
+v0.3 Release Notes
+==================
+
+Version bump for TKL v19.0 release - minor bugfixes - no functional changes.
+
+* Bugfixes (package related - implemented in unversioned release in v18.x):
+  - Fix misnamed import (pycurl_wrapper => py3curl_wrapper).
+  - Fix misnamed package dependency (turnkey-conf => turnkey-conffile).
+
+* General maintenance:
+  - Remove legacy travis config.
+  - Update gitignore to ignore common build & cached assests.
+  
+* Packaging updates:
+  - Set static datetime and exclude bytecode by default to make package leaner
+    and reproducable.
